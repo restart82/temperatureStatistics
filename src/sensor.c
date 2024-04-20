@@ -18,6 +18,11 @@ int getDataStringNumber(FILE* file)
 /* 
  * - парсит файл
  * - выделяет паямять под массив структур
+ * - заполняет массив структур
+ * 
+ *   fileName - исходный файл
+ *   size - указатель на размер массива структур
+ * 
  */
 void initSensorData(char* fileName, int* size)
 {
@@ -83,13 +88,13 @@ void initSensorData(char* fileName, int* size)
                 }
                 break;
             case HOUR:
-                if (temp[colCounter] > 0 && temp[colCounter] <= 24)
+                if (temp[colCounter] >= 0 && temp[colCounter] <= 24)
                 {
                     errorCounter++;
                 }
                 break;
             case MINUTE:
-                if (temp[colCounter] > 0 && temp[colCounter] <= 60)
+                if (temp[colCounter] >= 0 && temp[colCounter] <= 60)
                 {
                     errorCounter++;
                 }
@@ -102,11 +107,14 @@ void initSensorData(char* fileName, int* size)
         {
             temp[colCounter] *= sign;
 
-            if (temp[colCounter] >= -99 && temp[colCounter] <= 99)
+            if (colCounter == TEMPERATURE)
             {
-                errorCounter++;
+                if (temp[colCounter] >= -99 && temp[colCounter] <= 99)
+                {
+                    errorCounter++;
+                }
             }
-
+            
             if (errorCounter == COLUMN_NUMBER)
             {
                 // printf("%d.\t%d", stringCounter, temp[0]);
@@ -140,7 +148,7 @@ void initSensorData(char* fileName, int* size)
                 break;
             }
         }
-        else
+        else if (c != ' ')
         {
             errorCounter--;
         }
