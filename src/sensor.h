@@ -25,9 +25,39 @@ typedef enum
     TEMPERATURE
 }dataStruct_t;
 
-void initSensorData(char* fileName, int* size);
+/* 
+ * - парсит файл
+ * - выделяет паямять под массив структур
+ * - заполняет массив структур
+ * 
+ *   fileName - исходный файл
+ * 
+ */
+void initSensorData(char* fileName);
 
+/*
+* - вычисляет среднюю, минимальную и максимальную температуры за год
+* 
+*   ptrMean - указатель на среднюю годовую температуру
+*   ptrMaximum - указатель на максимальную годовую температуру
+*   ptrMininum - указатель на минимальную годовую температуру
+* 
+*/
+void getYearStatistics(float* ptrMean, int* ptrMaximum, int* ptrMininum);
 
+/*
+* - вычисляет среднюю, минимальную и максимальную температуры за указанный месяц
+* 
+*   monthNumber - месяц
+*   ptrMean - указатель на среднюю месячную температуру
+*   ptrMaximum - указатель на максимальную месячную температуру
+*   ptrMininum - указатель на минимальную месячную температуру
+* 
+*/
+void getMonthStatistics(int monthNumber, float* ptrMean, int* ptrMaximum, int* ptrMininum);
 
+bool chekMonth(int month);
+
+void printHelp();
 
 #endif

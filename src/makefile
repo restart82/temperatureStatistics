@@ -1,5 +1,4 @@
 all: stat.exe
-	.\stat.exe
 	
 stat.exe: main.o sensor.o
 	gcc -o stat sensor.o main.o

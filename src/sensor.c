@@ -1,6 +1,7 @@
 #include "sensor.h"
 
 SensorData_t* sensorData = NULL;
+int sensorDataSize = 0;
 
 int getDataStringNumber(FILE* file)
 {
@@ -15,16 +16,7 @@ int getDataStringNumber(FILE* file)
     return stringCounter;
 }
 
-/* 
- * - парсит файл
- * - выделяет паямять под массив структур
- * - заполняет массив структур
- * 
- *   fileName - исходный файл
- *   size - указатель на размер массива структур
- * 
- */
-void initSensorData(char* fileName, int* size)
+void initSensorData(char* fileName)
 {
     FILE* inputFile;
 
@@ -123,12 +115,12 @@ void initSensorData(char* fileName, int* size)
                 //     printf(";\t%d", temp[i]);
                 // }
                 // printf("\n");
-                sensorData[dataCounter].year = temp[YEAR];
-                sensorData[dataCounter].month = temp[MONTH];
-                sensorData[dataCounter].day = temp[DAY];
-                sensorData[dataCounter].hour = temp[HOUR];
-                sensorData[dataCounter].minute = temp[MINUTE];
-                sensorData[dataCounter].temperature = temp[TEMPERATURE];
+                sensorData[dataCounter].year = (uint16_t)temp[YEAR];
+                sensorData[dataCounter].month = (uint8_t)temp[MONTH];
+                sensorData[dataCounter].day = (uint8_t)temp[DAY];
+                sensorData[dataCounter].hour = (uint8_t)temp[HOUR];
+                sensorData[dataCounter].minute = (uint8_t)temp[MINUTE];
+                sensorData[dataCounter].temperature = (int8_t)temp[TEMPERATURE];
                 dataCounter++;
             }
             else
@@ -154,9 +146,85 @@ void initSensorData(char* fileName, int* size)
         }
     }
 
-    *size = dataCounter;
+    sensorDataSize = dataCounter;
 
     fclose(inputFile);
 }
 
+void getYearStatistics(float* ptrMean, int* ptrMaximum, int* ptrMininum)
+{
+    float mean = 0;
+    int min = sensorData[0].temperature;
+    int max = sensorData[0].temperature;
+
+    for (int i = 0; i < sensorDataSize; i++)
+    {
+        mean += sensorData[i].temperature;
+
+        if (sensorData[i].temperature > max)
+        {
+            max = sensorData[i].temperature;
+        }
+
+        if (sensorData[i].temperature < min)
+        {
+            min = sensorData[i].temperature;
+        }
+    }
+    // PRINT_INT(sensorDataSize);
+    mean = mean / sensorDataSize;
+
+    *ptrMean = mean;
+    *ptrMaximum = max;
+    *ptrMininum = min;
+}
+
+void getMonthStatistics(int monthNumber, float* ptrMean,
+        int* ptrMaximum, int* ptrMininum)
+{
+    float mean = 0;
+    int counter = 0;
+    int min = 99;
+    int max = -99;
+
+    for (int i = 0; i < sensorDataSize; i++)
+    {
+        if (sensorData[i].month == monthNumber)
+            {
+            mean += sensorData[i].temperature;
+
+            if (sensorData[i].temperature > max)
+            {
+                max = sensorData[i].temperature;
+            }
+
+            if (sensorData[i].temperature < min)
+            {
+                min = sensorData[i].temperature;
+            }
+
+            counter++;
+        }
+    }
+    // PRINT_INT(counter);
+    mean = mean / counter;
+
+    *ptrMean = mean;
+    *ptrMaximum = max;
+    *ptrMininum = min;
+}
+
+bool chekMonth(int month)
+{
+    return (month >= 0 && month <= 12);
+}
+
+void printHelp()
+{
+    printf("\nmanual:\n");
+    printf("  -h - help\n");
+    printf("  -f <filename.csv> - enter input file\n");
+    printf("  -m <month number> - get month statistics\n");
+    printf("  -y - get year statistics\n\n");
+}
 
