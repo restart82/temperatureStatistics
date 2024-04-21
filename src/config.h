@@ -12,8 +12,9 @@
 #define PRINT_STR(s)    printf("%s\n", s)
 #define PRINT_CH(c)     printf("%c\n", c)
 
+// #define DEBUG
+
 #define CURRENT_YEAR    2021
-#define INPUT_FILE_NAME  "temperature_small.csv"
-// #define INPUT_FILE_NAME  "temperature_big.csv"
+#define INPUT_FILE_DIR  "data/"
 
 #endif

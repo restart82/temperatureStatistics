@@ -35,8 +35,8 @@ void initSensorData(char* fileName)
         exit(2);
     }
 
-    int stringCounter = 0, //строки
-        colCounter = 0,    //столбцы  < 6
+    int stringCounter = 0,
+        colCounter = 0,
         errorCounter = 0,
         dataCounter = 0;
     int sign = 1;
@@ -58,7 +58,6 @@ void initSensorData(char* fileName)
         }
         else if (c == ';')
         {
-            // temp[colCounter] *= sign;
             switch (colCounter)
             {
             case YEAR:
@@ -109,12 +108,14 @@ void initSensorData(char* fileName)
             
             if (errorCounter == COLUMN_NUMBER)
             {
-                // printf("%d.\t%d", stringCounter, temp[0]);
-                // for (size_t i = 1; i < COLUMN_NUMBER; i++)
-                // {
-                //     printf(";\t%d", temp[i]);
-                // }
-                // printf("\n");
+                #ifdef DEBUG
+                printf("%d.\t%d", stringCounter, temp[0]);
+                for (size_t i = 1; i < COLUMN_NUMBER; i++)
+                {
+                    printf(";\t%d", temp[i]);
+                }
+                printf("\n");
+                #endif
                 sensorData[dataCounter].year = (uint16_t)temp[YEAR];
                 sensorData[dataCounter].month = (uint8_t)temp[MONTH];
                 sensorData[dataCounter].day = (uint8_t)temp[DAY];
@@ -171,7 +172,6 @@ void getYearStatistics(float* ptrMean, int* ptrMaximum, int* ptrMininum)
             min = sensorData[i].temperature;
         }
     }
-    // PRINT_INT(sensorDataSize);
     mean = mean / sensorDataSize;
 
     *ptrMean = mean;
@@ -206,7 +206,6 @@ void getMonthStatistics(int monthNumber, float* ptrMean,
             counter++;
         }
     }
-    // PRINT_INT(counter);
     mean = mean / counter;
 
     *ptrMean = mean;

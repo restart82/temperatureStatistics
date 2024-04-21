@@ -1,9 +1,6 @@
 #include "config.h"
 #include "sensor.h"
 
-extern SensorData_t* sensorData;
-extern int sensorDataSize;
-
 int main(int argc, char * const *argv)
 {
     int rez;
@@ -18,7 +15,7 @@ int main(int argc, char * const *argv)
             commandCounter++;
             break;
         case 'f':
-            char* cd = "../";
+            char* cd = INPUT_FILE_DIR;
             char* fileName = malloc(strlen(cd) + strlen(optarg) + 1);
             strcpy(fileName, cd);
             strcat(fileName, optarg);
@@ -37,10 +34,10 @@ int main(int argc, char * const *argv)
                 getMonthStatistics(month, &monthMean, &monthMax, &monthMin);
 
                 printf("\n%d-month temperature statistics:\n", month);
-                printf("  * mean\t%.2f\n", monthMean);
-                printf("  * max\t\t%d\n", monthMax);
-                printf("  * min\t\t%d\n", monthMin);
-            }
+                printf("  - mean\t%.2f\n", monthMean);
+                printf("  - max\t\t%d\n", monthMax);
+                printf("  - min\t\t%d\n\n\n", monthMin);
+            }  
             else
             {
                 printf("Error month not exist!");
@@ -58,9 +55,9 @@ int main(int argc, char * const *argv)
             getYearStatistics(&yearMean, &yearMax, &yearMin);
 
             printf("\nyear temperature statistics:\n");
-            printf("  * mean\t%.2f\n", yearMean);
-            printf("  * max\t\t%d\n", yearMax);
-            printf("  * min\t\t%d\n", yearMin);
+            printf("  - mean\t%.2f\n", yearMean);
+            printf("  - max\t\t%d\n", yearMax);
+            printf("  - min\t\t%d\n\n\n", yearMin);
 
             commandCounter++;
             break;
